@@ -217,7 +217,68 @@ function editProduct(id){
 function deleteProduct(id){if(confirm('Hapus layanan ini?')){db.products=db.products.filter(p=>p.id!==id);save()}}
 function addCategory(){let c=document.getElementById('newCat').value.trim();if(!c)return notify('Isi nama kategori');if(db.categories.some(x=>x.toLowerCase()===c.toLowerCase()))return notify('Kategori sudah ada');db.categories.push(c);document.getElementById('newCat').value='';save()}
 function changeStatus(id,status){
- let o=db.orders.find(x=>x.id===id);
- if(!o)return;
- if(status==='Dibayar'&&o.payment!=='Dibayar'){
-  if(!confirm('Pastikan transfer sudah
+  const o=db.orders.find(x=>x.id===id);
+  if(!o)return;
+  if(status==='Dibayar' && o.payment!=='Dibayar'){
+    if(!confirm('Pastikan pembayaran sudah benar-benar diterima. Lanjutkan?')){
+      renderAdmin();
+      return;
+    }
+    o.payment='Dibayar';
+  }
+  o.status=status;
+  save();
+  notify('Status pesanan diperbarui');
+}
+function verifyPayment(id){
+  const o=db.orders.find(x=>x.id===id);
+  if(!o)return;
+  if(o.payment==='Dibayar')return notify('Pembayaran sudah ditandai dibayar');
+  if(!confirm('Pastikan dana benar-benar sudah masuk ke rekening sebelum verifikasi. Lanjutkan?'))return;
+  o.payment='Dibayar';
+  if(o.status==='Menunggu pembayaran'||o.status==='Menunggu verifikasi')o.status='Diproses';
+  save();
+  notify('Pembayaran ditandai sudah diverifikasi');
+}
+function deleteOrder(id){
+  if(!confirm('Hapus pesanan ini dari data lokal browser?'))return;
+  db.orders=db.orders.filter(o=>o.id!==id);
+  save();
+  notify('Pesanan dihapus dari browser ini');
+}
+function fillSettings(){
+  document.getElementById('cfgName').value=db.settings.name||'KyoStore';
+  document.getElementById('cfgLogo').value=db.settings.logo||'K';
+  document.getElementById('cfgWA').value=db.settings.wa||'';
+  document.getElementById('cfgColor').value=db.settings.color||'#42ddff';
+  document.getElementById('cfgPay').value=db.settings.payment||'';
+}
+function saveSettings(){
+  const name=document.getElementById('cfgName').value.trim();
+  const logo=document.getElementById('cfgLogo').value.trim();
+  const wa=document.getElementById('cfgWA').value.trim().replace(/\D/g,'');
+  const color=document.getElementById('cfgColor').value;
+  const payment=document.getElementById('cfgPay').value.trim();
+  if(name.length<2)return notify('Nama toko minimal 2 karakter');
+  if(wa && !/^[0-9]{9,16}$/.test(wa))return notify('Periksa nomor WhatsApp, gunakan kode negara seperti 62812...');
+  db.settings={...db.settings,name,logo:logo||'K',wa,color,payment};
+  save();
+  notify('Pengaturan disimpan di browser ini');
+}
+function backup(){
+  const blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download='kyostore-backup.json';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+  notify('Backup lokal diunduh');
+}
+document.getElementById('year').textContent=new Date().getFullYear();
+applySettings();
+renderShop();
+renderAdmin();
+if(location.hash==='#admin')showAdmin();
