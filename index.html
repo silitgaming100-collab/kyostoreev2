@@ -1,0 +1,223 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KyoStore — Digital Services</title>
+<style>
+:root{--bg:#080d1b;--panel:#111a30;--line:#293653;--text:#edf4ff;--muted:#a2b0cc;--a:#42ddff;--b:#9472ff}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at top left,#172b50,transparent 45%),var(--bg);color:var(--text);font:15px Arial,sans-serif}
+button,input,textarea,select{font:inherit}
+button{border:0;border-radius:10px;padding:11px 15px;background:linear-gradient(100deg,var(--a),var(--b));color:#07101d;font-weight:bold;cursor:pointer}
+button.alt{background:#202b45;color:white;border:1px solid var(--line)}
+button.red{background:#482333;color:#ffd2df}
+input,textarea,select{width:100%;padding:12px;border-radius:10px;border:1px solid var(--line);background:#0a1224;color:white;margin:5px 0 12px}
+header{position:sticky;top:0;background:#080d1bf2;border-bottom:1px solid var(--line);z-index:3}
+nav,.container{max-width:1100px;margin:auto;padding:15px 20px}
+nav{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.logo{display:inline-grid;place-items:center;width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--a),var(--b));color:#07101d;font-weight:bold;margin-right:8px}
+.brand{font-size:20px;font-weight:bold}
+nav button{margin:2px}
+.hero{padding:55px 0 35px;display:grid;grid-template-columns:1.2fr .8fr;gap:25px;align-items:center}
+h1{font-size:clamp(38px,6vw,65px);line-height:1.05;margin:12px 0}
+h2{margin-top:0}.gradient{background:linear-gradient(90deg,var(--a),var(--b));color:transparent;background-clip:text}
+.muted{color:var(--muted);line-height:1.65}.eyebrow{color:var(--a);font-size:12px;font-weight:bold;letter-spacing:2px;text-transform:uppercase}
+.panel,.card{background:linear-gradient(145deg,#141f38,#0e1528);border:1px solid var(--line);border-radius:18px;padding:20px}
+.hero-art{min-height:250px;display:grid;place-items:center;font-size:90px;background:radial-gradient(circle at 30% 30%,#285b7c,transparent 40%),linear-gradient(135deg,#192c50,#2a174b);border-radius:20px}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:20px}
+.section{padding:25px 0 40px}
+.filters{display:flex;gap:10px;flex-wrap:wrap}.filters>*{flex:1;min-width:160px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+.card{display:flex;flex-direction:column;gap:11px}
+.art{height:100px;border-radius:13px;background:linear-gradient(135deg,#193552,#30204e);display:grid;place-items:center;font-size:42px}
+.tag{font-size:11px;color:var(--a);font-weight:bold}
+.price{font-size:20px;font-weight:bold}
+.card p{color:var(--muted);line-height:1.5;flex:1}
+.card .actions button{flex:1}
+footer{border-top:1px solid var(--line);padding:25px;color:var(--muted);text-align:center}
+.hidden{display:none!important}
+.admin-layout{display:grid;grid-template-columns:190px 1fr;gap:15px;padding-top:25px}
+.side button{width:100%;margin:4px 0;text-align:left}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:15px 0}
+.stat{padding:15px;background:#ffffff08;border:1px solid var(--line);border-radius:12px}
+.stat strong{display:block;font-size:23px;margin-bottom:5px}
+table{width:100%;border-collapse:collapse;min-width:550px}
+th,td{text-align:left;padding:10px;border-bottom:1px solid var(--line);font-size:13px}
+.tablewrap{overflow:auto}
+.badge{display:inline-block;background:#312a19;color:#ffdf8b;padding:5px 8px;border-radius:20px;font-size:11px}
+.order{border:1px solid var(--line);border-radius:12px;padding:15px;margin:10px 0;overflow-wrap:anywhere}
+.notice{background:#302719;color:#ffe0a1;border:1px solid #66502a;border-radius:10px;padding:12px;font-size:13px;line-height:1.5}
+.modalbg{position:fixed;inset:0;background:#000b;display:grid;place-items:center;z-index:10;padding:15px}
+.modal{width:100%;max-width:540px;max-height:90vh;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:20px}
+.toast{position:fixed;bottom:15px;right:15px;background:#182743;border:1px solid var(--line);padding:14px;border-radius:10px;z-index:20}
+small{color:var(--muted)}
+@media(max-width:750px){.hero{grid-template-columns:1fr;padding-top:30px}.grid{grid-template-columns:repeat(2,1fr)}.admin-layout{grid-template-columns:1fr}.side{display:flex;flex-wrap:wrap;gap:4px}.side button{width:auto;flex:1}.stats{grid-template-columns:1fr 1fr}}
+@media(max-width:500px){.container,nav{padding:13px}.grid{grid-template-columns:1fr}.hero-art{min-height:150px}.stats{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<header><nav>
+<div class="brand"><span class="logo" id="logo">K</span><span id="storeName">KyoStore</span></div>
+<div><button class="alt" onclick="showShop()">Toko</button><button class="alt" onclick="showAdmin()">Admin</button></div>
+</nav></header>
+
+<main id="shop">
+<div class="container">
+<section class="hero">
+<div>
+<div class="eyebrow">Digital services studio</div>
+<h1>Ide keren,<br><span class="gradient">solusi digital.</span></h1>
+<p class="muted">Bantu bisnis lu berkembang lewat website, desain, dan layanan digital yang sesuai kebutuhan.</p>
+<div class="actions"><button onclick="document.getElementById('catalog').scrollIntoView({behavior:'smooth'})">Jelajahi layanan ↓</button><button class="alt" onclick="generalWA()">Chat WhatsApp ↗</button></div>
+</div>
+<div class="hero-art">✦</div>
+</section>
+
+<section class="section" id="catalog">
+<div class="row"><div><div class="eyebrow">Katalog</div><h2>Jasa digital pilihan</h2></div><span id="count" class="muted"></span></div>
+<div class="filters">
+<input id="search" placeholder="Cari layanan..." oninput="renderShop()">
+<select id="filter" onchange="renderShop()"><option value="">Semua kategori</option></select>
+</div>
+<div class="grid" id="products"></div>
+</section>
+<section class="panel section">
+<h2>Butuh bantuan memilih jasa?</h2>
+<p class="muted">Tanya langsung ke admin untuk mendiskusikan kebutuhan dan harga.</p>
+<button onclick="generalWA()">Hubungi WhatsApp ↗</button>
+</section>
+</div>
+</main>
+
+<main id="admin" class="hidden container">
+<div id="login" class="panel" style="max-width:420px;margin:35px auto">
+<div class="eyebrow">Admin area</div><h2>Login Admin</h2>
+<input id="username" placeholder="Username">
+<input id="password" type="password" placeholder="Password">
+<button onclick="loginAdmin()">Masuk</button>
+<p class="muted">Demo lokal: username <b>admin</b>, password <b>kyo123</b>.</p>
+<div class="notice">Login ini hanya untuk demo. Jangan menggunakannya sebagai keamanan website publik.</div>
+</div>
+
+<div id="adminApp" class="admin-layout hidden">
+<aside class="panel side">
+<button onclick="tab('dashboard')">Dashboard</button>
+<button onclick="tab('productsAdmin')">Kelola produk</button>
+<button onclick="tab('ordersAdmin')">Pesanan</button>
+<button onclick="tab('settings')">Pengaturan</button>
+<button class="red" onclick="logout()">Keluar</button>
+</aside>
+<div>
+<section id="dashboard">
+<div class="eyebrow">Overview</div><h2>Dashboard</h2>
+<div class="stats">
+<div class="stat"><strong id="sProducts">0</strong><small>Produk aktif</small></div>
+<div class="stat"><strong id="sOrders">0</strong><small>Total pesanan</small></div>
+<div class="stat"><strong id="sPending">0</strong><small>Belum diverifikasi</small></div>
+</div>
+<div class="panel"><h3>Informasi</h3><p class="muted">Periksa pembayaran secara langsung sebelum menandai pesanan sebagai dibayar.</p></div>
+</section>
+
+<section id="productsAdmin" class="hidden">
+<div class="row"><h2>Kelola produk</h2><button onclick="editProduct()">+ Tambah</button></div>
+<div class="panel tablewrap"><table><thead><tr><th>Produk</th><th>Harga</th><th>Aksi</th></tr></thead><tbody id="productRows"></tbody></table></div>
+<div class="panel"><h3>Tambah kategori</h3><input id="newCat" placeholder="Nama kategori"><button onclick="addCategory()">Tambah</button><div id="cats" class="muted"></div></div>
+</section>
+
+<section id="ordersAdmin" class="hidden"><h2>Pesanan masuk</h2><div class="notice">Verifikasi pembayaran melalui mutasi rekening atau sumber pembayaran resmi. Screenshot saja bukan jaminan pembayaran sah.</div><div id="orderRows"></div></section>
+
+<section id="settings" class="hidden">
+<h2>Pengaturan toko</h2><div class="panel">
+<label>Nama toko</label><input id="cfgName">
+<label>Logo berupa teks singkat</label><input id="cfgLogo" maxlength="4">
+<label>Nomor WhatsApp internasional (contoh 62812...)</label><input id="cfgWA">
+<label>Warna aksen</label><input id="cfgColor" type="color" value="#42ddff">
+<label>Instruksi transfer</label><textarea id="cfgPay" rows="3" placeholder="Nama bank, nama pemilik, nomor rekening"></textarea>
+<button onclick="saveSettings()">Simpan pengaturan</button>
+</div><div class="panel"><button class="alt" onclick="backup()">Ekspor backup data</button><p class="muted">Backup hanya menyimpan data lokal dari browser ini.</p></div></section>
+</div></div>
+</main>
+<footer>© <span id="year"></span> <span id="footName">KyoStore</span> · Digital services</footer>
+<div id="modal"></div><div id="toast" class="toast hidden"></div>
+
+<script>
+const KEY='kyostore_site_demo';
+const defaults={
+ settings:{name:'KyoStore',logo:'K',wa:'6281649175956',color:'#42ddff',payment:'Silakan hubungi admin untuk instruksi transfer.'},
+ categories:['Website','Desain','Digital Marketing','Support'],
+ products:[
+ {id:1,name:'Website Bisnis',category:'Website',price:0,icon:'🌐',desc:'Website profesional untuk bisnis, profil usaha, dan layanan.'},
+ {id:2,name:'Website Kasir',category:'Website',price:0,icon:'🧾',desc:'Website kasir untuk membantu operasional usaha.'},
+ {id:3,name:'Desain Poster',category:'Desain',price:0,icon:'🎨',desc:'Poster promosi digital untuk produk atau layanan.'},
+ {id:4,name:'Logo & Branding',category:'Desain',price:0,icon:'✦',desc:'Identitas visual untuk brand bisnis.'},
+ {id:5,name:'Digital Marketing',category:'Digital Marketing',price:0,icon:'📈',desc:'Konten dan strategi pemasaran digital.'},
+ {id:6,name:'Perawatan Website',category:'Support',price:0,icon:'🛠️',desc:'Pembaruan konten dan bantuan pemeliharaan website.'}
+ ],orders:[]
+};
+let db=load(),isLogged=false;
+function load(){try{let x=JSON.parse(localStorage.getItem(KEY));if(x?.settings&&x?.products&&x?.orders&&x?.categories)return x}catch(e){}return JSON.parse(JSON.stringify(defaults))}
+function save(){localStorage.setItem(KEY,JSON.stringify(db));renderShop();renderAdmin()}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function money(n){return Number(n)>0?'Rp'+Number(n).toLocaleString('id-ID'):'Harga dikonfirmasi admin'}
+function notify(s){let t=document.getElementById('toast');t.textContent=s;t.classList.remove('hidden');setTimeout(()=>t.classList.add('hidden'),2500)}
+function applySettings(){document.getElementById('storeName').textContent=db.settings.name;document.getElementById('footName').textContent=db.settings.name;document.getElementById('logo').textContent=db.settings.logo||'K';document.documentElement.style.setProperty('--a',db.settings.color||'#42ddff');document.title=db.settings.name+' — Digital Services'}
+function showShop(){document.getElementById('shop').classList.remove('hidden');document.getElementById('admin').classList.add('hidden');history.replaceState(null,'','#shop');window.scrollTo(0,0)}
+function showAdmin(){document.getElementById('shop').classList.add('hidden');document.getElementById('admin').classList.remove('hidden');history.replaceState(null,'','#admin');document.getElementById('login').classList.toggle('hidden',isLogged);document.getElementById('adminApp').classList.toggle('hidden',!isLogged);renderAdmin();window.scrollTo(0,0)}
+function generalWA(){sendWA('Halo '+db.settings.name+', saya ingin bertanya tentang layanan digital.')}
+function sendWA(msg){let n=(db.settings.wa||'').replace(/\D/g,'');if(!n)return notify('Atur nomor WhatsApp di pengaturan admin.');window.open('https://wa.me/'+n+'?text='+encodeURIComponent(msg),'_blank')}
+function renderShop(){
+ applySettings();
+ let q=(document.getElementById('search')?.value||'').toLowerCase(),f=document.getElementById('filter');
+ let old=f?.value||'';
+ if(f)f.innerHTML='<option value="">Semua kategori</option>'+db.categories.map(c=>`<option value="${esc(c)}" ${old===c?'selected':''}>${esc(c)}</option>`).join('');
+ let list=db.products.filter(p=>(!old||p.category===old)&&(`${p.name} ${p.desc} ${p.category}`.toLowerCase().includes(q)));
+ document.getElementById('count').textContent=list.length+' layanan';
+ document.getElementById('products').innerHTML=list.length?list.map(p=>`<article class="card"><div class="art">${esc(p.icon)}</div><span class="tag">${esc(p.category)}</span><h3>${esc(p.name)}</h3><p>${esc(p.desc)}</p><div class="price">${money(p.price)}</div><div class="actions"><button onclick="checkout(${p.id})">Pesan jasa</button><button class="alt" onclick="orderWA(${p.id})">WhatsApp</button></div></article>`).join(''):'<div class="panel">Layanan tidak ditemukan.</div>';
+}
+function orderWA(id){let p=db.products.find(x=>x.id===id);if(p)sendWA(`Halo ${db.settings.name}, saya tertarik dengan ${p.name}. Harga: ${money(p.price)}. Mohon info lebih lanjut.`)}
+function openModal(html){document.getElementById('modal').innerHTML=`<div class="modalbg" onclick="if(event.target===this)closeModal()"><div class="modal">${html}</div></div>`}
+function closeModal(){document.getElementById('modal').innerHTML=''}
+function checkout(id){
+ let p=db.products.find(x=>x.id===id);if(!p)return;
+ openModal(`<div class="row"><h2>Checkout jasa</h2><button class="alt" onclick="closeModal()">✕</button></div><p class="muted">${esc(p.name)} — ${money(p.price)}</p>
+ <form id="checkoutForm"><label>Nama lengkap *</label><input name="name" required minlength="2" maxlength="80">
+ <label>Nomor WhatsApp *</label><input name="phone" required inputmode="tel" pattern="[+0-9 ()-]{9,18}" placeholder="08xxxxxxxxxx">
+ <label>Detail kebutuhan *</label><textarea name="details" required minlength="8" maxlength="1500" rows="4" placeholder="Jelaskan kebutuhan website/jasa lu..."></textarea>
+ <label>Metode pemesanan</label><select name="method"><option value="web">Checkout website — transfer manual</option><option value="wa">Lanjut via WhatsApp</option></select>
+ <button type="submit">Buat pesanan</button></form><small>Harga final dikonfirmasi admin. Jangan masukkan password atau data rahasia.</small>`);
+ document.getElementById('checkoutForm').onsubmit=e=>{
+ e.preventDefault();let f=new FormData(e.target),name=String(f.get('name')).trim(),phone=String(f.get('phone')).replace(/[ ()-]/g,''),details=String(f.get('details')).trim();
+ if(name.length<2||!/^\+?[0-9]{9,16}$/.test(phone)||details.length<8)return notify('Periksa nama, nomor, dan detail kebutuhan.');
+ let o={id:'KYO-'+Date.now().toString().slice(-8),product:p.name,productId:p.id,name,phone,details,price:p.price,status:'Menunggu pembayaran',payment:'Belum dibayar',date:new Date().toISOString()};
+ db.orders.unshift(o);save();closeModal();
+ if(f.get('method')==='wa')sendWA(`Halo admin KyoStore, saya ingin pesan. Kode: ${o.id}. Nama: ${name}. Layanan: ${p.name}. Nomor: ${phone}. Kebutuhan: ${details}. Mohon konfirmasi harga dan instruksi transfer.`);
+ else openModal(`<h2>Pesanan dibuat ✓</h2><div class="notice">Ini versi demo. Pesanan tersimpan di browser ini saja, belum terkirim ke server/admin online.</div><div class="panel"><small>Kode pesanan</small><h2>${esc(o.id)}</h2><b>${esc(o.product)}</b><p>Nama: ${esc(o.name)}</p><p>Harga: ${money(o.price)}</p><p>Status: ${esc(o.status)}</p></div><h3>Instruksi transfer</h3><p class="muted">${esc(db.settings.payment)}</p><p class="muted">Tunggu konfirmasi admin sebelum pekerjaan dimulai.</p><button onclick="sendWA(${JSON.stringify('Halo admin, saya ingin konfirmasi pesanan ' + '')}+${JSON.stringify(o.id)});closeModal()">Hubungi admin</button>`);
+ };
+}
+function loginAdmin(){if(document.getElementById('username').value==='admin'&&document.getElementById('password').value==='kyo123'){isLogged=true;showAdmin();notify('Login demo berhasil')}else notify('Username atau password salah')}
+function logout(){isLogged=false;showAdmin()}
+function tab(id){['dashboard','productsAdmin','ordersAdmin','settings'].forEach(x=>document.getElementById(x).classList.toggle('hidden',x!==id));renderAdmin();if(id==='settings')fillSettings()}
+function renderAdmin(){
+ if(!document.getElementById('sProducts'))return;
+ document.getElementById('sProducts').textContent=db.products.length;
+ document.getElementById('sOrders').textContent=db.orders.length;
+ document.getElementById('sPending').textContent=db.orders.filter(o=>o.payment!=='Dibayar').length;
+ document.getElementById('productRows').innerHTML=db.products.map(p=>`<tr><td>${esc(p.name)}<br><small>${esc(p.category)}</small></td><td>${money(p.price)}</td><td><button class="alt" onclick="editProduct(${p.id})">Edit</button> <button class="red" onclick="deleteProduct(${p.id})">Hapus</button></td></tr>`).join('');
+ document.getElementById('cats').innerHTML='Kategori: '+db.categories.map(esc).join(', ');
+ document.getElementById('orderRows').innerHTML=db.orders.length?db.orders.map(o=>`<div class="order"><div class="row"><b>${esc(o.product)}</b><span class="badge">${esc(o.status)}</span></div><p>${esc(o.id)} · ${esc(o.name)} · ${esc(o.phone)}</p><p class="muted">${esc(o.details)}</p><b>${money(o.price)}</b><p>Status pembayaran: ${esc(o.payment)}</p><label>Ubah status pesanan</label><select onchange="changeStatus('${o.id}',this.value)">${['Menunggu pembayaran','Menunggu verifikasi','Dibayar','Diproses','Menunggu revisi','Selesai','Dibatalkan'].map(s=>`<option ${o.status===s?'selected':''}>${s}</option>`).join('')}</select><button class="alt" onclick="verifyPayment('${o.id}')">Verifikasi transfer</button> <button class="red" onclick="deleteOrder('${o.id}')">Hapus</button></div>`).join(''):'<p class="muted">Belum ada pesanan.</p>';
+}
+function editProduct(id){
+ let p=id?db.products.find(x=>x.id===id):{name:'',category:db.categories[0]||'Umum',price:0,icon:'✦',desc:''};
+ openModal(`<div class="row"><h2>${id?'Edit':'Tambah'} layanan</h2><button class="alt" onclick="closeModal()">✕</button></div><form id="productForm"><label>Nama layanan</label><input name="name" required minlength="2" value="${esc(p.name)}"><label>Kategori</label><select name="category">${db.categories.map(c=>`<option ${c===p.category?'selected':''}>${esc(c)}</option>`).join('')}</select><label>Harga mulai (0 = konfirmasi admin)</label><input name="price" type="number" min="0" max="1000000000" required value="${p.price}"><label>Ikon</label><input name="icon" maxlength="8" value="${esc(p.icon)}"><label>Deskripsi</label><textarea name="desc" required minlength="8" rows="3">${esc(p.desc)}</textarea><button>Simpan layanan</button></form>`);
+ document.getElementById('productForm').onsubmit=e=>{e.preventDefault();let f=new FormData(e.target),v={name:String(f.get('name')).trim(),category:String(f.get('category')),price:Number(f.get('price')),icon:String(f.get('icon')).trim()||'✦',desc:String(f.get('desc')).trim()};if(id)Object.assign(db.products.find(x=>x.id===id),v);else db.products.push({id:Date.now(),...v});save();closeModal();notify('Layanan disimpan')};
+}
+function deleteProduct(id){if(confirm('Hapus layanan ini?')){db.products=db.products.filter(p=>p.id!==id);save()}}
+function addCategory(){let c=document.getElementById('newCat').value.trim();if(!c)return notify('Isi nama kategori');if(db.categories.some(x=>x.toLowerCase()===c.toLowerCase()))return notify('Kategori sudah ada');db.categories.push(c);document.getElementById('newCat').value='';save()}
+function changeStatus(id,status){
+ let o=db.orders.find(x=>x.id===id);
+ if(!o)return;
+ if(status==='Dibayar'&&o.payment!=='Dibayar'){
+  if(!confirm('Pastikan transfer sudah
